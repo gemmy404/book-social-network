@@ -14,6 +14,7 @@ import com.book.network.service.UserService;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -46,6 +47,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public void register(RegistrationRequest registrationRequest) throws MessagingException {
         Role userRole = roleRepo.findByName("USER")
                 .orElseThrow(() -> new IllegalStateException("ROLE USER was not initialized"));
+        if (userService.findByEmail(registrationRequest.getEmail()).isPresent()) {
+            throw new DuplicateKeyException("Email already used. Please choose another one.");
+        }
         String encodedPassword = passwordEncoder.encode(registrationRequest.getPassword());
         User savedUser = User.builder()
                 .firstName(registrationRequest.getFirstName())

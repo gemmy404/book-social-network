@@ -17,7 +17,8 @@ public class LoginRequest {
     @NotEmpty(message = "Email is mandatory")
     @NotBlank(message = "Email is mandatory")
     private String email;
-    @Password(message = "Please choose a strong password. Try a combination of letters, numbers and symbols.")
+    @NotEmpty(message = "Email is mandatory")
+    @NotBlank(message = "Email is mandatory")
     private String password;
 
 }
