@@ -31,6 +31,8 @@ public class User implements UserDetails, Principal {
     private Integer id;
     private String firstName;
     private String lastName;
+    @Transient
+    private String fullName;
     private LocalDate dateOfBirth;
     @Column(unique = true)
     private String email;
@@ -97,7 +99,8 @@ public class User implements UserDetails, Principal {
     }
 
     public String fullName() {
-        return firstName + " " + lastName;
+        fullName = firstName + " " + lastName;
+        return fullName;
     }
 
 }

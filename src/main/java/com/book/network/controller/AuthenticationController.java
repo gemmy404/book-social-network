@@ -1,6 +1,7 @@
 package com.book.network.controller;
 
 import com.book.network.dto.LoginRequest;
+import com.book.network.dto.LoginResponse;
 import com.book.network.dto.RegistrationRequest;
 import com.book.network.security.service.AuthenticationService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,7 +27,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
         return ResponseEntity.ok(authService.login(request));
     }
 

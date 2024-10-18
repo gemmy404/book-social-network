@@ -1,12 +1,11 @@
 package com.book.network.handler;
 
 import com.book.network.dto.ExceptionResponse;
-import com.book.network.enums.BusinessErrorCodes;
+import com.book.network.exception.OperationNotPermittedException;
 import jakarta.mail.MessagingException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -97,6 +96,18 @@ public class GlobalExceptionHandler {
                 .body(
                         ExceptionResponse.builder()
                                 .validationErrors(errors)
+                                .build()
+                );
+    }
+
+    @ExceptionHandler(OperationNotPermittedException.class)
+    public ResponseEntity<ExceptionResponse> handleException(OperationNotPermittedException exp) {
+        log.error(exp.getMessage());
+        return ResponseEntity
+                .status(BAD_REQUEST)
+                .body(
+                        ExceptionResponse.builder()
+                                .error(exp.getMessage())
                                 .build()
                 );
     }
