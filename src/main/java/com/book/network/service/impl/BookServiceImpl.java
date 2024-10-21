@@ -211,8 +211,8 @@ public class BookServiceImpl implements BookService {
             throw new OperationNotPermittedException("You can't borrow books that aren't sharable.");
         }
         User user = (User) connectedUser.getPrincipal();
-        if (book.getOwner().getId().equals(user.getId())) {
-            throw new OperationNotPermittedException("You can't borrow or return you own books.");
+        if (!book.getCreatedBy().equals(user.getId())) {
+            throw new OperationNotPermittedException("You cannot approve the return of a book you do not own");
         }
         BookTransactionHistory bookTransactionHistory = historyRepo.findByBookIdAndOwnerId(bookId, book.getOwner().getId())
                 .orElseThrow(() -> new OperationNotPermittedException("The book isn't returned yet." +
@@ -226,6 +226,9 @@ public class BookServiceImpl implements BookService {
         Book book = bookRepo.findById(bookId).orElseThrow(() -> new
                 EntityNotFoundException("No book found with ID: " + bookId));
         User user = (User) connectedUser.getPrincipal();
+        if (!book.getOwner().getId().equals(user.getId())) {
+            throw new OperationNotPermittedException("You can't upload cover images for books other than your own.");
+        }
         String bookCover = fileStorageUtil.saveFile(file, user.getId());
         book.setBookCover(bookCover);
         bookRepo.save(book);
