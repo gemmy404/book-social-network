@@ -66,6 +66,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public LoginResponse login(LoginRequest request) {
+        userService.findByEmail(request.getEmail()).orElseThrow(() -> new
+                UsernameNotFoundException("Your account was not found."));
         Authentication authentication = authenticationManager.authenticate(new
                 UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
         User user = (User) authentication.getPrincipal();
