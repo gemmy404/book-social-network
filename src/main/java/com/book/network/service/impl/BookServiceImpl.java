@@ -28,6 +28,7 @@ import java.util.Optional;
 
 import static com.book.network.repository.specification.BookSpecification.exceptOwnerId;
 import static com.book.network.repository.specification.BookSpecification.withOwnerId;
+import static com.book.network.repository.specification.TransactionHisSpecification.*;
 import static org.springframework.data.domain.Sort.Direction.DESC;
 
 @Service
@@ -47,6 +48,25 @@ public class BookServiceImpl implements BookService {
         book.setArchived(false);
         book.setOwner(user);
         return bookRepo.save(book).getId();
+    }
+
+    @Override
+    public Integer update(BookRequest request, Authentication connectedUser) {
+        if (request.id() == null) {
+            throw new OperationNotPermittedException("Which book you want to update?!");
+        }
+        Book book = bookRepo.findById(request.id()).orElseThrow(() -> new
+                EntityNotFoundException("Book not found with id: " + request.id()));
+        User user = (User) connectedUser.getPrincipal();
+        if (!book.getCreatedBy().equals(user.getId())) {
+            throw new OperationNotPermittedException("Can't update book if you are not owner it!");
+        }
+        Book updatedBook = bookMapper.toBook(request);
+        updatedBook.setBookCover(book.getBookCover());
+        updatedBook.setArchived(false);
+        updatedBook.setOwner(user);
+
+        return bookRepo.save(updatedBook).getId();
     }
 
     @Override
@@ -100,7 +120,7 @@ public class BookServiceImpl implements BookService {
     public PageResponse<BorrowedBookResponse> findAllBorrowedBooks(Integer page, Integer size, Authentication connectedUser) {
         User user = (User) connectedUser.getPrincipal();
         Pageable pageable = PageRequest.of(page, size, Sort.by(DESC, "createdDate"));
-        Page<BookTransactionHistory> allBorrowedBooks = historyRepo.findAllBorrowedBooks(pageable, user.getId());
+        Page<BookTransactionHistory> allBorrowedBooks = historyRepo.findAll(borrowedBooks(user.getId()), pageable);
         List<BorrowedBookResponse> bookResponses = allBorrowedBooks.stream()
                 .map(bookMapper::toBorrowedBookResponse)
                 .toList();
@@ -119,7 +139,7 @@ public class BookServiceImpl implements BookService {
     public PageResponse<BorrowedBookResponse> findAllReturnedBooks(Integer page, Integer size, Authentication connectedUser) {
         User user = (User) connectedUser.getPrincipal();
         Pageable pageable = PageRequest.of(page, size, Sort.by(DESC, "createdDate"));
-        Page<BookTransactionHistory> allReturnedBooks = historyRepo.findAllReturnedBooks(pageable, user.getId());
+        Page<BookTransactionHistory> allReturnedBooks = historyRepo.findAll(returnedBooks(user.getId()), pageable);
         List<BorrowedBookResponse> bookResponses = allReturnedBooks.stream()
                 .map(bookMapper::toBorrowedBookResponse)
                 .toList();
@@ -171,7 +191,7 @@ public class BookServiceImpl implements BookService {
         if (book.getOwner().getId().equals(user.getId())) {
             throw new OperationNotPermittedException("You can't borrow you own books.");
         }
-        final boolean isAlreadyBorrowed = historyRepo.isAlreadyBorrowedByUser(bookId, user.getId());
+        final boolean isAlreadyBorrowed = historyRepo.exists(isBorrowed(bookId, user.getId()));
         if (isAlreadyBorrowed) {
             throw new OperationNotPermittedException("You can't borrow the book, it has already been borrowed" +
                     " or you have already borrowed the book before.");
@@ -197,7 +217,7 @@ public class BookServiceImpl implements BookService {
         if (book.getOwner().getId().equals(user.getId())) {
             throw new OperationNotPermittedException("You can't borrow or return you own books.");
         }
-        BookTransactionHistory bookTransactionHistory = historyRepo.findByBookIdAndUserId(bookId, user.getId())
+        BookTransactionHistory bookTransactionHistory = historyRepo.findOne(byBookIdAndUserId(bookId, user.getId()))
                 .orElseThrow(() -> new OperationNotPermittedException("You didn't borrow this book."));
         bookTransactionHistory.setReturned(true);
         return historyRepo.save(bookTransactionHistory).getId();
@@ -214,7 +234,7 @@ public class BookServiceImpl implements BookService {
         if (!book.getCreatedBy().equals(user.getId())) {
             throw new OperationNotPermittedException("You cannot approve the return of a book you do not own");
         }
-        BookTransactionHistory bookTransactionHistory = historyRepo.findByBookIdAndOwnerId(bookId, book.getOwner().getId())
+        BookTransactionHistory bookTransactionHistory = historyRepo.findOne(byBookIdAndOwnerId(bookId, book.getOwner().getId()))
                 .orElseThrow(() -> new OperationNotPermittedException("The book isn't returned yet." +
                         " You can't approve its return."));
         bookTransactionHistory.setReturnApproved(true);

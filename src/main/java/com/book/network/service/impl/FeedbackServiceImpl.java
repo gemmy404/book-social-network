@@ -10,6 +10,7 @@ import com.book.network.exception.OperationNotPermittedException;
 import com.book.network.mapper.FeedbackMapper;
 import com.book.network.repository.BookRepo;
 import com.book.network.repository.FeedbackRepo;
+import com.book.network.repository.specification.FeedbackSpecification;
 import com.book.network.service.FeedbackService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.book.network.repository.specification.FeedbackSpecification.withBookId;
 import static org.springframework.data.domain.Sort.Direction.DESC;
 
 @Service
@@ -52,7 +54,7 @@ public class FeedbackServiceImpl implements FeedbackService {
                                                                  Authentication connectedUser) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(DESC, "createdDate"));
         User user = (User) connectedUser.getPrincipal();
-        Page<Feedback> feedbacks = feedbackRepo.findAllFeedbacksByBook(bookId, pageable);
+        Page<Feedback> feedbacks = feedbackRepo.findAll(withBookId(bookId), pageable);
         List<FeedbackResponse> feedbackResponses = feedbacks.stream()
                 .map(feedback -> feedbackMapper.toFeedbackResponse(feedback, user.getId()))
                 .toList();

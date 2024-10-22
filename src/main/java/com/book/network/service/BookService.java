@@ -11,6 +11,8 @@ public interface BookService {
 
     Integer save(BookRequest request, Authentication connectedUser);
 
+    Integer update(BookRequest request, Authentication connectedUser);
+
     BookResponse findById(Integer bookId);
 
     PageResponse<BookResponse> findAllBooks(Integer page, Integer size, Authentication connectedUser);
