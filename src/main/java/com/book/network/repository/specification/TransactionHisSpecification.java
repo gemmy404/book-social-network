@@ -12,7 +12,10 @@ public class TransactionHisSpecification {
 
     public static Specification<BookTransactionHistory> returnedBooks(Integer userId) {
         return (root, query, criteriaBuilder) ->
-                criteriaBuilder.equal(root.get("book").get("createdBy"), userId);
+                criteriaBuilder.and(
+                criteriaBuilder.equal(root.get("book").get("createdBy"), userId),
+                criteriaBuilder.isTrue(root.get("returned"))
+                );
     }
 
     public static Specification<BookTransactionHistory> isBorrowed(Integer bookId, Integer userId) {

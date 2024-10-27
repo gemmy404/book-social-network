@@ -43,7 +43,6 @@ public class BookServiceImpl implements BookService {
     @Override
     public Integer save(BookRequest request, Authentication connectedUser) {
         User user = (User) connectedUser.getPrincipal();
-        System.out.println("User ID: " + user.getId());
         Book book = bookMapper.toBook(request);
         book.setArchived(false);
         book.setOwner(user);
