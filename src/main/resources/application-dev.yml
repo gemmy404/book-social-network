@@ -30,6 +30,11 @@ spring:
         connectiontimeout: 5000
         timeout: 3000
         writetimeout: 5000
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: "http://localhost:9090/realms/book-social-network"
 
 logging:
   level:
@@ -38,13 +43,6 @@ logging:
         security: trace
 
 application:
-  security:
-    jwt:
-      secret-key: hjSvUFS8rGVFbLboI9OOlaZSLnHDiuYc8FC64386A9CFD4F1952
-      expiration: 86400000
-  mailing:
-    frontend:
-      activation-url: http://localhost:4200/activate-account
   file:
     upload:
       photos-output-path: ../uploads
