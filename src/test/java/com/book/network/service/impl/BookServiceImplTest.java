@@ -99,7 +99,7 @@ class BookServiceImplTest {
                 .build();
 
         BookTransactionHistory requestHis = BookTransactionHistory.builder()
-                .user(user)
+//                .user(user)
                 .book(book)
                 .returned(false)
                 .returnApproved(false)
@@ -107,14 +107,14 @@ class BookServiceImplTest {
 
         BookTransactionHistory savedHis = BookTransactionHistory.builder()
                 .id(1)
-                .user(user)
+//                .user(user)
                 .book(book)
                 .returned(false)
                 .returnApproved(false)
                 .build();
 
         when(bookRepo.findById(bookId)).thenReturn(Optional.of(book));
-        when(historyRepo.exists(isBorrowed(bookId, user.getId()))).thenReturn(false);
+//        when(historyRepo.exists(isBorrowed(bookId, user.getId()))).thenReturn(false);
         when(historyRepo.save(any(BookTransactionHistory.class))).thenReturn(savedHis);
 
         Integer response = bookService.borrowBook(bookId, authentication);

@@ -12,28 +12,28 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
-@RequestMapping("auth")
+//@RestController
+//@RequestMapping("auth")
 @RequiredArgsConstructor
 @Tag(name = "Authentication")
 public class AuthenticationController {
 
-    private final AuthenticationService authService;
-
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody RegistrationRequest request) throws MessagingException {
-        authService.register(request);
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
-        return ResponseEntity.ok(authService.login(request));
-    }
-
-    @GetMapping("/activate-account")
-    public void activateAccount(@RequestParam String token) throws MessagingException {
-        authService.activateAccount(token);
-    }
+//    private final AuthenticationService authService;
+//
+//    @PostMapping("/register")
+//    public ResponseEntity<?> register(@Valid @RequestBody RegistrationRequest request) throws MessagingException {
+//        authService.register(request);
+//        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+//    }
+//
+//    @PostMapping("/login")
+//    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
+//        return ResponseEntity.ok(authService.login(request));
+//    }
+//
+//    @GetMapping("/activate-account")
+//    public void activateAccount(@RequestParam String token) throws MessagingException {
+//        authService.activateAccount(token);
+//    }
 
 }

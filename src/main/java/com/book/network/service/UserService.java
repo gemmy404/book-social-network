@@ -5,7 +5,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.Optional;
 
-public interface UserService extends UserDetailsService {
+public interface UserService /*extends UserDetailsService*/ {
 
     void addUser(User user);
 
