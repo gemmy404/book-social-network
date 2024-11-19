@@ -10,7 +10,6 @@ import com.book.network.exception.OperationNotPermittedException;
 import com.book.network.mapper.FeedbackMapper;
 import com.book.network.repository.BookRepo;
 import com.book.network.repository.FeedbackRepo;
-import com.book.network.repository.specification.FeedbackSpecification;
 import com.book.network.service.FeedbackService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;

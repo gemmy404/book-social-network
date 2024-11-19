@@ -6,12 +6,15 @@ import com.book.network.dto.BorrowedBookResponse;
 import com.book.network.dto.PageResponse;
 import com.book.network.entity.Book;
 import com.book.network.entity.BookTransactionHistory;
+import com.book.network.entity.Notification;
 import com.book.network.entity.User;
+import com.book.network.enums.NotificationStatus;
 import com.book.network.exception.OperationNotPermittedException;
 import com.book.network.mapper.BookMapper;
 import com.book.network.repository.BookRepo;
 import com.book.network.repository.TransactionHistoryRepo;
 import com.book.network.service.BookService;
+import com.book.network.service.NotificationService;
 import com.book.network.util.FileStorageUtil;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Optional;
 
+import static com.book.network.enums.NotificationStatus.*;
 import static com.book.network.repository.specification.BookSpecification.exceptOwnerId;
 import static com.book.network.repository.specification.BookSpecification.withOwnerId;
 import static com.book.network.repository.specification.TransactionHisSpecification.*;
@@ -38,6 +42,7 @@ public class BookServiceImpl implements BookService {
     private final BookRepo bookRepo;
     private final TransactionHistoryRepo historyRepo;
     private final BookMapper bookMapper;
+    private final NotificationService notificationService;
     private final FileStorageUtil fileStorageUtil;
 
     @Override
@@ -176,8 +181,14 @@ public class BookServiceImpl implements BookService {
                 .returned(false)
                 .returnApproved(false)
                 .build();
-
-        return historyRepo.save(bookTransactionHistory).getId();
+        BookTransactionHistory saved = historyRepo.save(bookTransactionHistory);
+        Notification notification = Notification.builder()
+                .status(BORROWED)
+                .message("Your book has been borrowed")
+                .bookTitle(book.getTitle())
+                .build();
+        notificationService.sendNotification(book.getCreatedBy(), notification);
+        return saved.getId();
     }
 
     @Override
@@ -194,7 +205,14 @@ public class BookServiceImpl implements BookService {
         BookTransactionHistory bookTransactionHistory = historyRepo.findOne(byBookIdAndUserId(bookId, connectedUser.getName()))
                 .orElseThrow(() -> new OperationNotPermittedException("You didn't borrow this book."));
         bookTransactionHistory.setReturned(true);
-        return historyRepo.save(bookTransactionHistory).getId();
+        BookTransactionHistory saved = historyRepo.save(bookTransactionHistory);
+        Notification notification = Notification.builder()
+                .status(RETURNED)
+                .message("Your book has been returned")
+                .bookTitle(book.getTitle())
+                .build();
+        notificationService.sendNotification(book.getCreatedBy(), notification);
+        return saved.getId();
     }
 
     @Override
@@ -212,7 +230,14 @@ public class BookServiceImpl implements BookService {
                 .orElseThrow(() -> new OperationNotPermittedException("The book isn't returned yet." +
                         " You can't approve its return."));
         bookTransactionHistory.setReturnApproved(true);
-        return historyRepo.save(bookTransactionHistory).getId();
+        BookTransactionHistory saved = historyRepo.save(bookTransactionHistory);
+        Notification notification = Notification.builder()
+                .status(RETURNED_APPROVED)
+                .message("Your book returned has been approved")
+                .bookTitle(book.getTitle())
+                .build();
+        notificationService.sendNotification(bookTransactionHistory.getCreatedBy(), notification);
+        return saved.getId();
     }
 
     @Override
