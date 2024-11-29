@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-@Component
+//@Component
 public class JwtTokenUtil {
 
     @Value("${application.security.jwt.secret-key}")

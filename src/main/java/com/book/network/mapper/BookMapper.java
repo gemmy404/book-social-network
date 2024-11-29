@@ -19,7 +19,7 @@ public interface BookMapper {
         return BookResponse.builder()
                 .id(book.getId())
                 .title(book.getTitle())
-                .owner(book.getOwner().fullName())
+//                .owner(book.getOwner().fullName())
                 .authorName(book.getAuthorName())
                 .isbn(book.getIsbn())
                 .synopsis(book.getSynopsis())

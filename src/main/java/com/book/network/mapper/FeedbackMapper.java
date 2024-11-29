@@ -12,7 +12,7 @@ public interface FeedbackMapper {
     @Mapping(target = "book.id", source = "bookId")
     Feedback toFeedback(FeedbackRequest feedBackRequest);
 
-    default FeedbackResponse toFeedbackResponse(Feedback feedback, Integer userId) {
+    default FeedbackResponse toFeedbackResponse(Feedback feedback, String userId) {
         return FeedbackResponse.builder()
                 .note(feedback.getNote())
                 .comment(feedback.getComment())

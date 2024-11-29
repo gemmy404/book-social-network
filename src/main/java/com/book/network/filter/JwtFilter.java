@@ -19,7 +19,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-@Service
+//@Service
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
 
@@ -42,15 +42,15 @@ public class JwtFilter extends OncePerRequestFilter {
         }
         jwt = jwtTokenHeader.substring(7);
         userEmail = jwtTokenUtil.extractUsername(jwt);
-        if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userService.loadUserByUsername(userEmail);
-            if (jwtTokenUtil.isTokenValid(jwt, userDetails)) {
-                UsernamePasswordAuthenticationToken authToken = new
-                        UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authToken);
-            }
-        }
+//        if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+//            UserDetails userDetails = userService.loadUserByUsername(userEmail);
+//            if (jwtTokenUtil.isTokenValid(jwt, userDetails)) {
+//                UsernamePasswordAuthenticationToken authToken = new
+//                        UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+//                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+//                SecurityContextHolder.getContext().setAuthentication(authToken);
+//            }
+//        }
         filterChain.doFilter(request, response);
     }
 

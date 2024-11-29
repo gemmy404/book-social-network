@@ -5,17 +5,17 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-    <changeSet id="2024-10-21-001" author="Mahmoud Gamal">
-        <sqlFile path="db/changelog/2024_10_21_3_14_create_table__user.sql" />
-    </changeSet>
+<!--    <changeSet id="2024-10-21-001" author="Mahmoud Gamal">-->
+<!--        <sqlFile path="db/changelog/2024_10_21_3_14_create_table__user.sql" />-->
+<!--    </changeSet>-->
 
-    <changeSet id="2024-10-21-002" author="mahmoud gamal">
-        <sqlFile path="db/changelog/2024_10_21_3_19_create_table_role.sql" />
-    </changeSet>
+<!--    <changeSet id="2024-10-21-002" author="mahmoud gamal">-->
+<!--        <sqlFile path="db/changelog/2024_10_21_3_19_create_table_role.sql" />-->
+<!--    </changeSet>-->
 
-    <changeSet id="2024-10-21-003" author="Mahmoud Gamal">
-        <sqlFile path="db/changelog/2024_10_21_3_19_create_table__user_role.sql" />
-    </changeSet>
+<!--    <changeSet id="2024-10-21-003" author="Mahmoud Gamal">-->
+<!--        <sqlFile path="db/changelog/2024_10_21_3_19_create_table__user_role.sql" />-->
+<!--    </changeSet>-->
 
     <changeSet id="2024-10-21-004" author="Mahmoud Gamal">
         <sqlFile path="db/changelog/2024_10_21_3_19_create_table_book.sql" />
@@ -29,8 +29,8 @@
         <sqlFile path="db/changelog/2024_10_21_3_19_create_table_feedback.sql" />
     </changeSet>
 
-    <changeSet id="2024-10-21-007" author="Mahmoud Gamal">
-        <sqlFile path="db/changelog/2024_10_21_3_19_create_table_token.sql" />
-    </changeSet>
+<!--    <changeSet id="2024-10-21-007" author="Mahmoud Gamal">-->
+<!--        <sqlFile path="db/changelog/2024_10_21_3_19_create_table_token.sql" />-->
+<!--    </changeSet>-->
 
 </databaseChangeLog>
