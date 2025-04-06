@@ -2,19 +2,19 @@ server:
   port: 8088
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3307/book_social_network
-    username: root
-    password: 123456
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:${DB_ENGINE:postgresql}://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:book_social_network}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:123456}
+    driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
     show-sql: false
     properties:
       hibernate:
         format_sql: true
-    database: mysql
-    database-platform: org.hibernate.dialect.MySQL8Dialect
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
   mail:
     host: localhost
     port: 1025
@@ -45,6 +45,8 @@ application:
   mailing:
     frontend:
       activation-url: http://localhost:4200/activate-account
+  cors:
+    origins: http://localhost:4200
   file:
     upload:
       photos-output-path: ../uploads

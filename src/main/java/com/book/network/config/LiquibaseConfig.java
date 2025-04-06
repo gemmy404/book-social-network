@@ -32,6 +32,7 @@ public class LiquibaseConfig {
         SpringLiquibase liquibase = new SpringLiquibase();
         liquibase.setChangeLog("classpath:db/master.xml");
         liquibase.setDataSource(dataSource());
+        liquibase.setShouldRun(false);
         return liquibase;
     }
 
