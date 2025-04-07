@@ -17,7 +17,7 @@ Book Social Network is a application that enables users to manage their book col
 ## Technologies Used
 
 - Spring Boot 3 & Spring Security 6
-- JWT Token Authentication
+- OAuth2 & Keycloak
 - Spring Data JPA
 - Liquibase
 - MapStruct
@@ -25,6 +25,7 @@ Book Social Network is a application that enables users to manage their book col
 - JSR-303 & Spring Validation
 - Mysql DB
 - OpenAPI & Swagger UI Documentation
+- Docker & Docker-Compose
 - JUnit5 for Testing
 - Tomcat Server
 - IntelliJ IDE
